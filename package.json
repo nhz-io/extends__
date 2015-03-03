@@ -1,6 +1,6 @@
 {
   "name": "extends__",
-  "version": "0.0.3",
+  "version": "0.0.4",
   "description": "Requireable Coffeescript __extends",
   "main": "dist/extends__.js",
   "scripts": {

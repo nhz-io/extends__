@@ -1,4 +1,4 @@
-__extends
+extends__
 =========
 
 Requireable CoffeeScript  `__extends` [![Build Status][travis-image]][travis-url]
