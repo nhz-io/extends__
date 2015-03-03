@@ -60,7 +60,7 @@ LICENSE
 
 VERSION
 -------
-#### 0.0.3
+#### 0.0.5
 * Better `README.md`
 * Now wrapping default [CoffeScript][coffee-url] extends
 
