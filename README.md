@@ -12,6 +12,23 @@ Install
 npm install --save extends__
 ```
 
+Mixin syntax
+------------
+
+It is possible to inherit from multiple classes - one Base and the rest Mixins.
+Mixin methods must not call `super`, and must not extend anything. They should be
+a simple Interfaces. The Mixin `constructor` is ignored. It will not be called.
+
+#### [CoffeeScript][coffee-url]
+
+```coffeescript
+
+class Parent
+class Mixin1
+class Mixin2
+class Child extends [Parent, Mixin1, Mixin2]
+```
+
 Use with [GULP][gulp-url]
 -------------------------
 
@@ -60,6 +77,9 @@ LICENSE
 
 VERSION
 -------
+#### 0.0.6
+* Added `Mixin` Functionality
+
 #### 0.0.5
 * Better `README.md`
 * Now wrapping default [CoffeScript][coffee-url] extends
