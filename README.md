@@ -25,24 +25,40 @@ will be called first. The `super` inside mixin methods will got up the mixin's i
 #### [CoffeeScript][coffee-url]
 
 ```coffeescript
+class Parent then constructor: ->
+  (@log ||= []).push 'Parent'
 
-class Parent
-  constructor: ->
-    @log ||= []
-    @log.push 'Parent'
+class Mixin1 then constructor: ->
+  @log.push 'Mixin1'
 
-class Mixin1
-  constructor: ->
-    @log ||= []
-    @log.push 'Mixin1'
+class Mixin2 then constructor: ->
+  @log.push 'Mixin2'
 
-class Mixin2
-  constructor: ->
-    @log ||= []
-    @log.push 'Mixin2'
+class MixinParent then constructor: ->
+  @log.push 'MixinParent'
 
-class Child extends [Parent, Mixin1, Mixin2]
+class MixinChild extends MixinParent then constructor: ->
+  super
+  @log.push "MixinChild"
+
+class Child extends [Parent, Mixin1, MixinChild, Mixin2]
   constructor: ->
+    super
+    @log.push "Child"
+
+console.log JSON.stringify (new Child).log, null, '  '
+```
+
+**will yield**
+```json
+[
+  "Parent",
+  "Mixin1",
+  "MixinParent",
+  "MixinChild",
+  "Mixin2",
+  "Child"
+]
 ```
 
 Use with [GULP][gulp-url]
@@ -93,6 +109,9 @@ LICENSE
 
 VERSION
 -------
+#### 0.0.8
+* Updated the CoffeeScript extend example in README.md
+
 #### 0.0.7
 * Mixins now can have constructors and call `super`
 
