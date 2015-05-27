@@ -5,6 +5,8 @@ describe 'extends__', ->
   class ParentClass
     constructor: ->
       @parent = true
+      @log || = []
+      @log.push 'ParentClass'
 
     parentMethod: ->
       @calledParent = true
@@ -15,6 +17,8 @@ describe 'extends__', ->
   class MixinOneClass
     constructor: ->
       @mixin = true
+      @log || = []
+      @log.push 'MixinOneClass'
 
     mixinOneMethod: ->
       @calledMixinOne = true
@@ -29,6 +33,8 @@ describe 'extends__', ->
   class MixinTwoClass
     constructor: ->
       @mixin = true
+      @log || = []
+      @log.push 'MixinTwoClass'
 
     mixinTwoMethod: ->
       @calledMixinTwo = true
@@ -40,12 +46,33 @@ describe 'extends__', ->
 
     mixinTwoValue: true
 
+  class ExtendedMixinOneClass
+    constructor: ->
+      @log || = []
+      @log.push 'ExtendedMixinOneClass'
+
+    mixinSuperMethod: ->
+      @mixinSuper = true
+      return this
+
+  class ExtendedMixinTwoClass
+    extends__ ExtendedMixinTwoClass, ExtendedMixinOneClass
+
+    constructor: ->
+      super
+      @log || = []
+      @log.push 'ExtendedMixinTwoClass'
+
+    mixinSuperMethod: -> super
+
   class ChildClass
     extends__ ChildClass, ParentClass
 
     constructor: ->
-      @child = true
       super
+      @log || = []
+      @log.push 'ChildClass'
+      @child = true
 
     childMethod: ->
       @calledChild = true
@@ -54,12 +81,14 @@ describe 'extends__', ->
     childValue: true
 
   class MultipleChildClass
-    extends__ MultipleChildClass, [ ParentClass, MixinOneClass, MixinTwoClass ]
+    extends__ MultipleChildClass, [ ParentClass, MixinOneClass, ExtendedMixinTwoClass, MixinTwoClass ]
 
     constructor: ->
       @superChain = []
-      @multipleChild = true
       super
+      @multipleChild = true
+      @log || = []
+      @log.push 'MultipleChildClass'
 
     multipleChildMethod: ->
       @calledMultipleChild = true
@@ -104,6 +133,13 @@ describe 'extends__', ->
       test = new MultipleChildClass
       it 'should call multiple child constructor', -> test.multipleChild.should.be.ok
       it 'should call parent constructor', -> test.parent.should.be.ok
+      it 'should call all mixin constructors', ->
+        test.log[0].should.be.equal 'ParentClass'
+        test.log[1].should.be.equal 'MixinOneClass'
+        test.log[2].should.be.equal 'ExtendedMixinOneClass'
+        test.log[3].should.be.equal 'ExtendedMixinTwoClass'
+        test.log[4].should.be.equal 'MixinTwoClass'
+        test.log[5].should.be.equal 'MultipleChildClass'
 
     describe '#multipleChildMethod()', ->
       test = new MultipleChildClass

@@ -1,8 +1,14 @@
 module.exports = (ChildClass, ParentClasses) ->
   if ParentClasses instanceof Array and ParentClasses.length
     class ParentClass extends ParentClasses.shift()
+      constructor: ->
+        super
+        for MixinClass in ParentClasses
+          MixinClass.apply this, arguments
+
     for MixinClass in ParentClasses
-      ParentClass::[key] = value for own key, value of MixinClass::
+      for own key, value of MixinClass::
+        ParentClass::[key] = value unless key is 'constructor'
   else
     ParentClass = ParentClasses
 

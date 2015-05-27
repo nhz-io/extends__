@@ -16,17 +16,33 @@ Mixin syntax
 ------------
 
 It is possible to inherit from multiple classes - one Base and the rest Mixins.
-Mixin methods must not call `super`, and must not extend anything. They should be
-a simple Interfaces. The Mixin `constructor` is ignored. It will not be called.
+~~Mixin methods must not call `super`, and must not extend anything. They should be
+a simple Interfaces. The Mixin `constructor` is ignored. It will not be called.~~
+Mixins can be fully capable classes with constructors and `super` calls. The constructors
+will be called in the order they appear in inheritance list. The superclass constructor
+will be called first. The `super` inside mixin methods will got up the mixin's inheritance chain.
 
 #### [CoffeeScript][coffee-url]
 
 ```coffeescript
 
 class Parent
+  constructor: ->
+    @log ||= []
+    @log.push 'Parent'
+
 class Mixin1
+  constructor: ->
+    @log ||= []
+    @log.push 'Mixin1'
+
 class Mixin2
+  constructor: ->
+    @log ||= []
+    @log.push 'Mixin2'
+
 class Child extends [Parent, Mixin1, Mixin2]
+  constructor: ->
 ```
 
 Use with [GULP][gulp-url]
@@ -77,6 +93,9 @@ LICENSE
 
 VERSION
 -------
+#### 0.0.7
+* Mixins now can have constructors and call `super`
+
 #### 0.0.6
 * Added `Mixin` Functionality
 
